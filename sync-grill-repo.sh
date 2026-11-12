@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
-# Sync the grill-repo skill from its single source of truth to every install target.
-#   - Claude Code, Codex, zcode, kimicode, Muse Code, Pi, and Antigravity CLI use SKILL.md verbatim AND get the
-#     bundled scripts/ helper (repo-scan.py) copied alongside, so the installed skill can run it.
+# Sync the grill-repo skill from its single source of truth to local agent install targets.
+#   - Claude Code and Codex are synced unconditionally; optional agent roots are synced when present.
 #   - Cursor consumes an .mdc rule with its own frontmatter (description / globs / alwaysApply),
 #     so we strip SKILL.md's YAML frontmatter and prepend the Cursor block below.
 #
@@ -16,9 +15,24 @@ SCRIPTS_SRC="${SCRIPTS_SRC:-$SCRIPT_DIR/scripts}"
 [ -f "$SRC" ]         || { echo "✗ source not found: $SRC" >&2; exit 1; }
 [ -d "$SCRIPTS_SRC" ] || { echo "✗ scripts dir not found: $SCRIPTS_SRC" >&2; exit 1; }
 
+PRIMARY_ROOTS=("$HOME/.claude" "$HOME/.codex")
+OPTIONAL_ROOTS=(
+  "$HOME/.agents"
+  "$HOME/.config/muse"
+  "$HOME/.gemini/config"
+  "$HOME/.pi/agent"
+  "$HOME/.zcode"
+  "$HOME/.kimicode"
+)
+ROOTS=("${PRIMARY_ROOTS[@]}")
+for opt_root in "${OPTIONAL_ROOTS[@]}"; do
+  if [ -d "$opt_root" ]; then
+    ROOTS+=("$opt_root")
+  fi
+done
+
 written=""
-for root in "$HOME/.claude" "$HOME/.codex" \
-  "$HOME/.config/muse" "$HOME/.gemini/config" "$HOME/.pi/agent" "$HOME/.zcode" "$HOME/.kimicode"; do
+for root in "${ROOTS[@]}"; do
   skills_dir="$root/skills"
   mkdir -p "$skills_dir"
   canon="$(cd "$skills_dir" && pwd -P)"
@@ -53,4 +67,4 @@ CURSOR_FRONTMATTER
 } > "$CURSOR"
 echo "✓ synced  $CURSOR  (Cursor frontmatter applied)"
 
-echo "Done — grill-repo synced (SKILL.md + scripts/) to Claude, Codex, zcode, kimicode, muse, antigravity, pi, and Cursor (.mdc)."
+echo "Done — grill-repo synced (SKILL.md + scripts/) to ${#ROOTS[@]} agent skill roots and Cursor (.mdc)."
