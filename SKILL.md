@@ -183,8 +183,7 @@ Defaults apply **only** on an explicit "just go" / hand-over. Each answer maps d
   not asserted here.)* (Not a helper flag — it governs subagent dispatch.)
 - **#subagents** — the **wave width** (concurrency). **Default 5**, **clamped to [1, 16]**; a non-integer or
   value < 1 is **rejected and re-asked**. (Not a helper flag — it governs how many bins run at once.)
-- **Walk submodule?** — default **no** → `--submodule blackbox`; opt-in → `--submodule walk` (the `ponytail`
-  submodule is otherwise a black box — Step 4).
+- **Walk submodule?** — default **no** → `--submodule blackbox`; opt-in → `--submodule walk` (a submodule such as `vendor/sdk` is otherwise a black box — Step 4).
 - **Scope limits** — default **none**; optionally **depth caps** per folder → one `--depth DIR=N` each, and/or
   **skip-globs** for large vendored/generated trees → one `--skip GLOB` each (Step 4).
 - Store the chosen **run-config** (model, #subagents, and the exact `plan` flags) in the manifest (Step 5) so
@@ -213,7 +212,7 @@ Consume its stdout JSON:
   value) — the binary/symlink files recorded with **no LLM read** (S4): binaries (git-reported,
   null-byte-sniffed untracked, or on the stub list) and **symlinks (the `target` field records the link
   target, never followed)** → map entries with `stub:true`.
-- `submodules` → `[{name, url, commit, walked}]` — the `ponytail` submodule as ONE black-box entry
+- `submodules` → `[{name, url, commit, walked}]` — each submodule (e.g. `vendor/sdk`) as ONE black-box entry
   (name/URL/pinned commit) when `--submodule blackbox` (S4); with `--submodule walk` (S5) its files are
   already enumerated into `files`/`bins` (fingerprinted off the submodule's own commit) and `walked:true`,
   and the pinned commit is recorded for staleness.
@@ -281,7 +280,7 @@ it; treat any non-zero helper exit as fatal and write nothing further).
 ### 10. Output, stamping, freshness block & single-writer lock (S12)
 - Write `docs/grill-repo/INDEX.md` + `docs/grill-repo/manifest.json` + per-directory shards, updated **in
   place** at the stable path (no date in the filename). A shard's filename is the directory's repo-relative
-  path with separators **sanitised to `__`** (`ponytail/skills` → `files/ponytail__skills.md`; root files →
+  path with separators **sanitised to `__`** (`vendor/sdk` → `files/vendor__sdk.md`; root files →
   `files/_root.md`).
 - The **header** records: commit SHA, branch, ISO scan date, clean/dirty-at-scan, map **schema-version**,
   the **`complete`** flag, and the **run-config**. **Branch is display-only** — a branch change alone does

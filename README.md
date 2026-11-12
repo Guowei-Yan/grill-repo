@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/Guowei-Yan/grill-repo/actions/workflows/ci.yml/badge.svg)](https://github.com/Guowei-Yan/grill-repo/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-3776AB.svg)](#)
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-3776AB.svg)](https://www.python.org/)
 
 Incremental Git content-hash repository scanner and deterministic subagent wave bin-packer for persistent codebase maps (**zero third-party runtime dependencies**).
 
@@ -30,7 +30,7 @@ Re-reading an entire repository from scratch in every coding-agent session waste
 python3 scripts/repo-scan.py plan --root .
 
 # Check incremental staleness against an existing manifest
-python3 scripts/repo-scan.py staleness --root . --manifest .repo-map/manifest.json
+python3 scripts/repo-scan.py staleness --root . --manifest docs/grill-repo/manifest.json
 ```
 
 ### Run the Test Suite (35 Tests)

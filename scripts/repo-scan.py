@@ -7,7 +7,7 @@ diffs the tree against a saved manifest for staleness. Emits JSON to stdout.
 
 It NEVER reads file contents for meaning (no constants / functions / classes
 parsing -- that is the LLM scanning subagents' job) and it writes no map files.
-See docs/grill-repo-build/helper-contract.md for the authoritative contract.
+See SKILL.md for the authoritative contract.
 """
 import argparse
 import hashlib
